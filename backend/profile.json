@@ -1,0 +1,146 @@
+
+{
+  "name": "Gowtham G B",
+  "headline": "Full Stack Developer | React.js, Node.js, Python",
+  "location": "Saidapet, Chennai, Tamil Nadu, India",
+
+  "contact": {
+    "email": "gbgowthamg@gmail.com",
+    "phone": "+91 8489966821",
+    "location": "Saidapet, Chennai, Tamil Nadu, India",
+    "linkedin": "https://www.linkedin.com/in/gbgowtham/",
+    "github": ""
+  },
+
+  "education": {
+    "degree": "Integrated M.Sc. Computer Science",
+    "institution": "College of Engineering, Guindy (CEG), Anna University, Chennai",
+    "status": "Final-year student",
+    "expected_course_end": "June 2027",
+    "note": "Use the latest official academic records for exact graduation and certificate dates."
+  },
+
+  "summary": "Computer Science student interested in full-stack web development and building practical applications. Experience includes a BookOrder e-commerce project using React, Node.js, Express and MySQL. Currently extending backend skills with Python and FastAPI.",
+
+  "skills": {
+    "frontend": [
+      "React.js",
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "Tailwind CSS",
+      "Vite"
+    ],
+    "backend": [
+      "Node.js",
+      "Express.js",
+      "REST APIs",
+      "JWT authentication",
+      "Python (learning)",
+      "FastAPI (learning)"
+    ],
+    "database": [
+      "MySQL",
+      "SQL"
+    ],
+    "tools": [
+      "Git",
+      "GitHub",
+      "Postman",
+      "XAMPP",
+      "phpMyAdmin"
+    ]
+  },
+
+  "experience": [
+    {
+      "organization": "Muthu Soft Labs Pvt. Ltd.",
+      "role": "Full Stack Web Development Intern",
+      "period": "August 2025 to December 2025 ",
+      "description": "Worked on BookOrder, a book-ordering/e-commerce application. The project used React and Vite on the frontend, with Node.js, Express and MySQL on the backend.",
+      "highlights": [
+        "Implemented frontend pages such as home, login, registration, profile and cart",
+        "Worked with REST API integration and JWT-based authentication",
+        "Used MySQL with XAMPP/phpMyAdmin during development",
+        "Payment functionality was for testing/demo purposes"
+      ]
+    }
+  ],
+
+  "projects": [
+    {
+      "name": "BookOrder — Book Ordering Application",
+      "type": "Full-stack web application",
+      "stack": [
+        "React",
+        "Vite",
+        "Tailwind CSS",
+        "Node.js",
+        "Express.js",
+        "MySQL",
+        "JWT",
+        "bcryptjs"
+      ],
+      "description": "An e-commerce-style application for browsing and ordering books, with user authentication and cart/order-related flows.",
+      "features": [
+        "Login and registration",
+        "User profile and cart",
+        "REST API backend",
+        "MySQL database",
+        "Admin and order modules planned/implemented as appropriate to the current version"
+      ],
+      "links": {
+        "demo": "",
+        "github": ""
+      }
+    },
+    {
+      "name": "AI-Based Student Academic Assistant",
+      "type": "Academic project / prototype",
+      "stack": [
+        "Python",
+        "OpenCV",
+        "MediaPipe",
+        "ESP32",
+        "Serial communication"
+      ],
+      "description": "A student-assistance prototype intended to bring together academic information and focus-monitoring features. A camera-based prototype detects possible distraction states and can communicate a signal to an ESP32 buzzer.",
+      "features": [
+        "Academic assistant concept for timetable, attendance, marks and notes",
+        "Camera-based focus monitoring prototype",
+        "ESP32 serial signal and buzzer integration"
+      ],
+      "links": {
+        "demo": "",
+        "github": ""
+      }
+    }
+  ],
+
+  "interests": [
+    "Full-stack development",
+    "Backend engineering",
+    "AI-enabled web applications",
+    "Software engineering internships"
+  ],
+
+  "links": {
+    "linkedin": "https://www.linkedin.com/in/gbgowtham/",
+    "github": "",
+    "email": "gbgowthamg@gmail.com"
+  },
+
+  "availability": "Interested in software development internships and entry-level opportunities. Confirm availability and dates directly with Gowtham.",
+
+  "answering_rules": [
+    "Only state personal facts that are present in this profile.",
+    "Do not invent metrics, grades, achievements, employers, dates, project links, certifications, or production deployment claims.",
+    "If a fact is missing or uncertain, say that it is not listed in the portfolio and invite the recruiter to contact Gowtham.",
+    "Be concise, professional, and speak about Gowtham in the third person unless the recruiter asks for a first-person introduction.",
+    "Distinguish learning skills from demonstrated experience. Python and FastAPI are currently listed as learning skills.",
+    "Do not disclose private information or speculate about personal circumstances.",
+    "When asked for contact information, provide the email, phone number, LinkedIn URL and location from the contact section.",
+    "When asked about GitHub, explain that the professional GitHub profile link is not currently available.",
+    "When asked how to contact Gowtham, recommend email or LinkedIn."
+  ]
+}
