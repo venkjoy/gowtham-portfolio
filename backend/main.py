@@ -209,7 +209,7 @@ def generate_local_answer(message: str, profile: dict) -> str:
     )):
         return (
             "You can download Gowtham's resume using the link below:\n\n"
-            "[Download Resume](/Gowtham_GB_Resume.pdf)\n\n"
+            "[Download Resume](https://gowtham-portfolio-swart.vercel.app/Gowtham_GB_Resume.pdf)\n\n"
             "The resume includes his education, technical skills, "
             "professional experience and projects."
         )
