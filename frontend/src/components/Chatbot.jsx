@@ -1,5 +1,16 @@
+
 import { useEffect, useRef, useState } from 'react'
-import { Bot, MessageCircle, RotateCcw, Send, Sparkles, X } from 'lucide-react'
+import {
+  Bot,
+  MessageCircle,
+  RotateCcw,
+  Send,
+  Sparkles,
+  X,
+} from 'lucide-react'
+
+// Use the exact URL from your working portfolio resume button.
+const RESUME_URL = 'PASTE_YOUR_WORKING_RESUME_URL_HERE'
 
 // Suggested recruiter questions
 const suggestions = [
@@ -27,7 +38,16 @@ function renderInline(text) {
 
     if (linkMatch) {
       const label = linkMatch[1]
-      const url = linkMatch[2]
+      let url = linkMatch[2].trim()
+
+      // Use the known working portfolio URL for resume links.
+      const isResumeLink =
+        /resume|curriculum vitae|\bcv\b/i.test(label) ||
+        /\.pdf(?:[?#].*)?$/i.test(url)
+
+      if (isResumeLink && !RESUME_URL.startsWith('PASTE_')) {
+        url = RESUME_URL
+      }
 
       const isSafeUrl =
         url.startsWith('https://') ||
@@ -36,17 +56,19 @@ function renderInline(text) {
         url.startsWith('tel:') ||
         url.startsWith('/')
 
-      if (!isSafeUrl) return <span key={index}>{label}</span>
+      if (!isSafeUrl) {
+        return <span key={index}>{label}</span>
+      }
 
-      const isResume = url.toLowerCase().endsWith('.pdf')
+      const isPdf = /\.pdf(?:[?#].*)?$/i.test(url)
 
       return (
         <a
           key={index}
           href={url}
-          target={url.startsWith('http') ? '_blank' : undefined}
-          rel={url.startsWith('http') ? 'noreferrer' : undefined}
-          download={isResume ? true : undefined}
+          target={isPdf ? '_self' : '_blank'}
+          rel="noreferrer"
+          download={isPdf ? 'Gowtham_GB_Resume.pdf' : undefined}
           className="font-semibold text-emerald-500 underline underline-offset-4 transition hover:text-emerald-400"
         >
           {label}
@@ -75,7 +97,9 @@ function FormattedMessage({ content }) {
       {lines.map((line, index) => {
         const trimmed = line.trim()
 
-        if (!trimmed) return <div key={index} className="h-1" />
+        if (!trimmed) {
+          return <div key={index} className="h-1" />
+        }
 
         if (/^[•*-]\s/.test(trimmed)) {
           return (
@@ -111,6 +135,7 @@ function TypingIndicator() {
   return (
     <div className="flex items-end gap-2">
       <Avatar small />
+
       <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-md border border-[var(--border)] bg-[var(--muted)] px-4 py-3.5">
         {[0, 1, 2].map((item) => (
           <span
@@ -119,6 +144,7 @@ function TypingIndicator() {
             style={{ animationDelay: `${item * 0.15}s` }}
           />
         ))}
+
         <span className="sr-only">Assistant is typing</span>
       </div>
     </div>
@@ -140,25 +166,37 @@ export default function Chatbot() {
   // Scroll to the latest message
   useEffect(() => {
     if (open) {
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+      bottomRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+      })
     }
   }, [history, busy, open])
 
-  // Focus the input when the chat opens
+  // Focus input when chat opens
   useEffect(() => {
-    if (open) setTimeout(() => inputRef.current?.focus(), 150)
+    if (open) {
+      setTimeout(() => inputRef.current?.focus(), 150)
+    }
   }, [open])
 
-  // Close with the Escape key
+  // Close with Escape key
   useEffect(() => {
     if (!open) return
-    const onKey = (e) => e.key === 'Escape' && setOpen(false)
+
+    const onKey = (e) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+
     window.addEventListener('keydown', onKey)
+
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
+  // Reset chat
   function resetChat() {
     if (busyRef.current) return
+
     setHistory([initialMessage])
     setInput('')
   }
@@ -174,35 +212,56 @@ export default function Chatbot() {
     const startTime = Date.now()
 
     const previousHistory = history
-      .filter((item) => item.role === 'user' || item.role === 'assistant')
+      .filter(
+        (item) =>
+          item.role === 'user' || item.role === 'assistant'
+      )
       .slice(-6)
 
-    setHistory((items) => [...items, { role: 'user', content: message }])
+    setHistory((items) => [
+      ...items,
+      { role: 'user', content: message },
+    ])
 
     setInput('')
     setBusy(true)
 
     const waitMinimum = async () => {
-      const remaining = Math.max(0, 1000 - (Date.now() - startTime))
-      if (remaining > 0) await new Promise((r) => setTimeout(r, remaining))
+      const remaining = Math.max(
+        0,
+        1000 - (Date.now() - startTime)
+      )
+
+      if (remaining > 0) {
+        await new Promise((resolve) =>
+          setTimeout(resolve, remaining)
+        )
+      }
     }
 
     try {
       const base = (
-        import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'
+        import.meta.env.VITE_API_BASE_URL ||
+        'http://127.0.0.1:8000'
       ).replace(/\/$/, '')
 
       const response = await fetch(`${base}/api/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, history: previousHistory }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message,
+          history: previousHistory,
+        }),
       })
 
       const data = await response.json()
 
       if (!response.ok) {
         throw new Error(
-          data.detail || 'The assistant could not answer. Please try again.'
+          data.detail ||
+            'The assistant could not answer. Please try again.'
         )
       }
 
@@ -251,6 +310,7 @@ export default function Chatbot() {
             <div className="relative flex items-center gap-3">
               <div className="relative">
                 <Avatar />
+
                 <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-[var(--surface)] bg-teal-400" />
               </div>
 
@@ -258,6 +318,7 @@ export default function Chatbot() {
                 <p className="font-display font-bold leading-tight">
                   Gowtham's assistant
                 </p>
+
                 <p className="text-xs text-[var(--subtext)]">
                   Answers from his portfolio data
                 </p>
@@ -288,12 +349,17 @@ export default function Chatbot() {
           </header>
 
           {/* Messages */}
-          <div className="flex-1 space-y-4 overflow-y-auto px-4 py-5" aria-live="polite">
+          <div
+            className="flex-1 space-y-4 overflow-y-auto px-4 py-5"
+            aria-live="polite"
+          >
             {history.map((item, index) => (
               <div
                 key={`${index}-${item.role}`}
                 className={`flex items-end gap-2 ${
-                  item.role === 'user' ? 'justify-end' : 'justify-start'
+                  item.role === 'user'
+                    ? 'justify-end'
+                    : 'justify-start'
                 }`}
               >
                 {item.role === 'assistant' && <Avatar small />}
@@ -312,11 +378,14 @@ export default function Chatbot() {
 
             {busy && <TypingIndicator />}
 
-            {/* Starter questions: shown only at the start */}
+            {/* Starter questions */}
             {isFresh && !busy && (
               <div className="space-y-2.5 pt-2">
                 <p className="flex items-center gap-1.5 text-xs font-medium text-[var(--subtext)]">
-                  <Sparkles size={13} className="text-emerald-500" />
+                  <Sparkles
+                    size={13}
+                    className="text-emerald-500"
+                  />
                   Try asking
                 </p>
 
@@ -338,7 +407,7 @@ export default function Chatbot() {
             <div ref={bottomRef} />
           </div>
 
-          {/* After the first message: suggestions become a scrolling row */}
+          {/* Follow-up suggestions */}
           {!isFresh && (
             <div className="flex gap-2 overflow-x-auto border-t border-[var(--border)] px-3 py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {suggestions.map((suggestion) => (
@@ -394,6 +463,7 @@ export default function Chatbot() {
         className="fixed bottom-5 right-4 z-50 flex items-center gap-2.5 rounded-full bg-emerald-500 py-3.5 pl-5 pr-5 font-semibold text-slate-950 shadow-lg shadow-emerald-500/25 transition hover:-translate-y-1 hover:bg-emerald-400 sm:right-6"
       >
         {open ? <X size={20} /> : <MessageCircle size={20} />}
+
         <span>{open ? 'Close' : 'Ask my AI'}</span>
 
         {!open && (
