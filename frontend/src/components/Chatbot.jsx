@@ -8,9 +8,8 @@ import {
   Sparkles,
   X,
 } from 'lucide-react'
-
 const RESUME_URL =
-  'https://gowtham-portfolio-swart.vercel.app/Gowtham%20GB_CV.pdf'
+  'https://gowtham-portfolio-swart.vercel.app/Gowtham_GB_Resume.pdf'
 
 // Suggested recruiter questions
 const suggestions = [
