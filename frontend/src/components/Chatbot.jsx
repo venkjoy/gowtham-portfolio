@@ -9,8 +9,8 @@ import {
   X,
 } from 'lucide-react'
 
-// Use the exact URL from your working portfolio resume button.
-const RESUME_URL = 'PASTE_YOUR_WORKING_RESUME_URL_HERE'
+const RESUME_URL =
+  'https://gowtham-portfolio-swart.vercel.app/Gowtham%20GB_CV.pdf'
 
 // Suggested recruiter questions
 const suggestions = [
@@ -68,7 +68,7 @@ function renderInline(text) {
           href={url}
           target={isPdf ? '_self' : '_blank'}
           rel="noreferrer"
-          download={isPdf ? 'Gowtham_GB_Resume.pdf' : undefined}
+          download={isPdf ? 'Gowtham%20GB_CV.pdf' : undefined}
           className="font-semibold text-emerald-500 underline underline-offset-4 transition hover:text-emerald-400"
         >
           {label}
