@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react'
 import {
   ArrowDownRight,
@@ -225,57 +224,136 @@ function Terminal() {
 
 /* ------------------------------ project mockups ------------------------------ */
 
+const shopBooks = [
+  { t: 'The Alchemist', a: 'Paulo Coelho', p: '₹299', c: 'from-emerald-500/60 to-teal-700/60' },
+  { t: 'Atomic Habits', a: 'James Clear', p: '₹449', c: 'from-violet-500/60 to-indigo-700/60' },
+  { t: 'Deep Work', a: 'Cal Newport', p: '₹399', c: 'from-amber-500/60 to-orange-700/60' },
+  { t: 'Clean Code', a: 'Robert Martin', p: '₹599', c: 'from-sky-500/60 to-blue-700/60' },
+  { t: 'Ikigai', a: 'Héctor García', p: '₹249', c: 'from-rose-500/60 to-pink-700/60' },
+  { t: 'Wings of Fire', a: 'A.P.J. Abdul Kalam', p: '₹199', c: 'from-lime-500/60 to-green-700/60' },
+]
+
+const bookingHalls = [
+  { n: 'Seminar Hall', cap: 120, s: 'Available', ok: true },
+  { n: 'Conference Room', cap: 40, s: 'Booked', ok: false },
+  { n: 'Examination Hall', cap: 200, s: 'Waitlist', ok: false },
+  { n: 'Auditorium', cap: 500, s: 'Available', ok: true },
+]
+
 function Mock({ type }) {
+  const url =
+    type === 'shop'
+      ? 'bookorder.app/shop'
+      : type === 'booking'
+      ? 'campushall.app/halls'
+      : 'app.local'
+
   return (
     <div className="relative h-full min-h-[15rem] overflow-hidden bg-gradient-to-br from-emerald-500/20 via-[var(--muted)] to-teal-500/10 p-5 sm:p-8">
       <div className="mx-auto flex h-full max-w-md flex-col overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-xl">
+        {/* browser bar */}
         <div className="flex items-center gap-1.5 border-b border-[var(--border)] px-3 py-2">
           <span className="h-2 w-2 rounded-full bg-rose-400" />
           <span className="h-2 w-2 rounded-full bg-amber-300" />
           <span className="h-2 w-2 rounded-full bg-teal-400" />
-          <span className="ml-3 h-3 flex-1 rounded bg-[var(--muted)]" />
+          <span className="ml-3 flex-1 truncate rounded bg-[var(--muted)] px-2 py-0.5 font-mono text-[9px] text-[var(--subtext)]">
+            {url}
+          </span>
         </div>
 
         {type === 'shop' ? (
-          <div className="grid flex-1 grid-cols-3 gap-3 p-3">
-            {[0, 1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="flex flex-col gap-1.5">
-                <div
-                  className="flex-1 rounded-md bg-gradient-to-b from-emerald-500/40 to-emerald-500/10"
-                  style={{ opacity: 1 - i * 0.08 }}
-                />
-                <div className="h-1.5 w-4/5 rounded bg-[var(--border)]" />
-                <div className="h-1.5 w-2/5 rounded bg-emerald-500/60" />
+          <div className="flex flex-1 flex-col gap-3 p-3">
+            {/* shop nav */}
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold">
+                📚 Book<span className="text-emerald-500">Order</span>
+              </span>
+
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-[var(--muted)] px-2.5 py-1 text-[9px] text-[var(--subtext)]">
+                  Search books…
+                </span>
+                <span className="rounded-full bg-emerald-500 px-2.5 py-1 text-[9px] font-semibold text-slate-950">
+                  Cart · 2
+                </span>
               </div>
-            ))}
+            </div>
+
+            {/* book grid */}
+            <div className="grid flex-1 grid-cols-3 gap-3">
+              {shopBooks.map((b) => (
+                <div key={b.t} className="flex min-w-0 flex-col">
+                  <div
+                    className={`flex aspect-[3/4] items-end rounded-md bg-gradient-to-br ${b.c} p-1.5`}
+                  >
+                    <span className="text-[8px] font-bold leading-tight text-white drop-shadow">
+                      {b.t}
+                    </span>
+                  </div>
+
+                  <p className="mt-1.5 truncate text-[9px] font-semibold">
+                    {b.t}
+                  </p>
+                  <p className="truncate text-[8px] text-[var(--subtext)]">
+                    {b.a}
+                  </p>
+
+                  <div className="mt-1 flex items-center justify-between">
+                    <span className="text-[9px] font-bold text-emerald-500">
+                      {b.p}
+                    </span>
+                    <span className="rounded bg-emerald-500/15 px-1.5 py-0.5 text-[7px] font-semibold text-emerald-500">
+                      + Add
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         ) : type === 'booking' ? (
           <div className="flex flex-1 flex-col gap-3 p-3">
+            {/* header */}
             <div className="flex items-center justify-between">
-              <div className="h-3 w-28 rounded bg-[var(--border)]" />
-              <div className="h-5 w-16 rounded-full bg-emerald-500/20" />
+              <span className="text-[11px] font-bold">
+                🏛️ Campus <span className="text-emerald-500">Halls</span>
+              </span>
+              <span className="rounded-full bg-emerald-500 px-2.5 py-1 text-[9px] font-semibold text-slate-950">
+                My Bookings
+              </span>
             </div>
 
+            {/* hall cards */}
             <div className="grid flex-1 grid-cols-2 gap-3">
-              {[
-                'Seminar Hall',
-                'Conference Room',
-                'Examination Hall',
-                'Auditorium',
-              ].map((hall, i) => (
+              {bookingHalls.map((h) => (
                 <div
-                  key={hall}
-                  className="flex flex-col justify-between rounded-lg border border-[var(--border)] bg-[var(--muted)] p-3"
+                  key={h.n}
+                  className="flex flex-col justify-between rounded-lg border border-[var(--border)] bg-[var(--muted)] p-2.5"
                 >
-                  <div className="h-8 rounded bg-emerald-500/15" />
-                  <div className="mt-2 text-[9px] font-semibold text-[var(--subtext)]">
-                    {hall}
+                  <div className="h-8 rounded bg-gradient-to-br from-emerald-500/30 to-teal-700/30" />
+
+                  <div className="mt-2">
+                    <p className="truncate text-[10px] font-semibold">
+                      {h.n}
+                    </p>
+                    <p className="text-[8px] text-[var(--subtext)]">
+                      Capacity: {h.cap}
+                    </p>
                   </div>
-                  <div
-                    className={`mt-2 h-1.5 w-3/4 rounded ${
-                      i === 2 ? 'bg-amber-400/70' : 'bg-emerald-500/60'
-                    }`}
-                  />
+
+                  <div className="mt-2 flex items-center justify-between">
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[8px] font-semibold ${
+                        h.ok
+                          ? 'bg-emerald-500/15 text-emerald-500'
+                          : 'bg-amber-400/15 text-amber-500'
+                      }`}
+                    >
+                      {h.s}
+                    </span>
+                    <span className="text-[8px] font-semibold text-emerald-500">
+                      Book →
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
