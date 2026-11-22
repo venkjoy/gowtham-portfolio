@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from 'react'
 import {
   ArrowDownRight,
@@ -30,30 +31,42 @@ const navItems = [
 ]
 
 const skills = [
-  { title: 'Frontend', items: ['React.js', 'JavaScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'Vite'] },
-  { title: 'Backend', items: ['Node.js', 'Express.js', 'REST APIs', 'JWT', 'Python', 'FastAPI'], learning: ['Python', 'FastAPI'] },
-  { title: 'Database & tools', items: ['MySQL', 'SQL', 'Git', 'GitHub', 'Postman', 'XAMPP'] },
+  {
+    title: 'Frontend',
+    items: ['React.js', 'JavaScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'Vite'],
+  },
+  {
+    title: 'Backend',
+    items: ['Node.js', 'Express.js', 'REST APIs', 'JWT', 'Python', 'FastAPI'],
+    learning: ['Python', 'FastAPI'],
+  },
+  {
+    title: 'Database & tools',
+    items: ['MySQL', 'SQL', 'Git', 'GitHub', 'Postman', 'XAMPP'],
+  },
 ]
+
+/* ------------------------------ projects ------------------------------ */
 
 const projects = [
   {
     title: 'BookOrder',
     kind: 'Full-stack web application',
     description:
-      'An e-commerce-style book ordering application with user authentication, profile, cart, and order-related flows.',
+      'An e-commerce-style book ordering application with user authentication, profile management, cart functionality, and order-related flows.',
     stack: ['React', 'Tailwind CSS', 'Node.js', 'Express', 'MySQL', 'JWT'],
     mock: 'shop',
-    github: '',
+    github: 'https://github.com/venkjoy/OnlineBookOrderingSystem',
     demo: '',
   },
   {
-    title: 'AI-Based Student Academic Assistant',
-    kind: 'Academic project / prototype',
+    title: 'Campus Hall Booking System',
+    kind: 'Full-stack web application',
     description:
-      'A student assistant concept for academic information with a camera-based focus-monitoring prototype and ESP32 buzzer integration.',
-    stack: ['Python', 'OpenCV', 'MediaPipe', 'ESP32', 'Serial'],
-    mock: 'focus',
-    github: '',
+      'A campus facility booking platform where users can view available halls, submit booking requests, review their reservations, and cancel bookings through an organized interface.',
+    stack: ['React', 'Node.js', 'Express', 'MySQL', 'REST APIs'],
+    mock: 'booking',
+    github: 'https://github.com/venkjoy/campus-hall-booking',
     demo: '',
   },
 ]
@@ -72,31 +85,40 @@ const terminalLines = [
 
 function useActiveSection(ids) {
   const [active, setActive] = useState('')
+
   useEffect(() => {
     const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
+      (entries) =>
+        entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
       { rootMargin: '-45% 0px -50% 0px' }
     )
+
     ids.forEach((id) => {
       const el = document.getElementById(id)
       if (el) obs.observe(el)
     })
+
     return () => obs.disconnect()
   }, [ids])
+
   return active
 }
 
 function useScrollProgress() {
   const [p, setP] = useState(0)
+
   useEffect(() => {
     const onScroll = () => {
       const h = document.documentElement.scrollHeight - window.innerHeight
       setP(h > 0 ? window.scrollY / h : 0)
     }
+
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
+
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
   return p
 }
 
@@ -107,6 +129,7 @@ const trackSpot = (e) => {
 }
 
 /* Terminal that types out the developer object once, on load */
+
 function Terminal() {
   const total = terminalLines.reduce((n, l) => n + l.join('').length, 0)
   const [count, setCount] = useState(0)
@@ -116,6 +139,7 @@ function Terminal() {
       setCount(total)
       return
     }
+
     const id = setInterval(() => {
       setCount((c) => {
         if (c >= total) {
@@ -125,15 +149,21 @@ function Terminal() {
         return c + 1
       })
     }, 38)
+
     return () => clearInterval(id)
   }, [total])
 
   let left = count
-  const lineColours = ['text-emerald-500', 'text-amber-400', 'text-[var(--subtext)]']
+  const lineColours = [
+    'text-emerald-500',
+    'text-amber-400',
+    'text-[var(--subtext)]',
+  ]
 
   return (
     <div className="relative">
       <div className="absolute -inset-px rounded-3xl bg-gradient-to-br from-emerald-500/40 via-transparent to-teal-500/30 blur-sm" />
+
       <div className="relative rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-2xl sm:p-7">
         <div className="mb-6 flex items-center justify-between">
           <div className="flex gap-1.5" aria-hidden="true">
@@ -141,23 +171,41 @@ function Terminal() {
             <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
             <span className="h-2.5 w-2.5 rounded-full bg-teal-400" />
           </div>
-          <span className="font-mono text-xs text-[var(--subtext)]">developer.js</span>
+
+          <span className="font-mono text-xs text-[var(--subtext)]">
+            developer.js
+          </span>
         </div>
 
-        <pre className="min-h-[11.5rem] overflow-hidden font-mono text-[13px] leading-7 sm:text-sm" aria-label="developer object">
+        <pre
+          className="min-h-[11.5rem] overflow-hidden font-mono text-[13px] leading-7 sm:text-sm"
+          aria-label="developer object"
+        >
           {terminalLines.map((parts, i) => {
             const edge = i === 0 || i === terminalLines.length - 1
+
             const spans = parts.map((p, j) => {
               const shown = p.slice(0, Math.max(0, left))
               left -= p.length
+
               if (!shown) return null
+
               const cls = edge
-                ? j === 1 ? 'text-sky-400' : 'text-violet-400'
+                ? j === 1
+                  ? 'text-sky-400'
+                  : 'text-violet-400'
                 : lineColours[j]
-              return <span key={j} className={cls}>{shown}</span>
+
+              return (
+                <span key={j} className={cls}>
+                  {shown}
+                </span>
+              )
             })
+
             return <div key={i}>{spans}</div>
           })}
+
           <span className="inline-block h-4 w-2 translate-y-0.5 animate-pulse bg-emerald-500" />
         </pre>
 
@@ -166,6 +214,7 @@ function Terminal() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-60" />
             <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-teal-400" />
           </span>
+
           <span className="text-[var(--subtext)]">Now:</span>
           <span className="font-medium">Full stack + AI</span>
         </div>
@@ -174,7 +223,8 @@ function Terminal() {
   )
 }
 
-/* Simple CSS "screenshots" for the two projects */
+/* ------------------------------ project mockups ------------------------------ */
+
 function Mock({ type }) {
   return (
     <div className="relative h-full min-h-[15rem] overflow-hidden bg-gradient-to-br from-emerald-500/20 via-[var(--muted)] to-teal-500/10 p-5 sm:p-8">
@@ -185,15 +235,50 @@ function Mock({ type }) {
           <span className="h-2 w-2 rounded-full bg-teal-400" />
           <span className="ml-3 h-3 flex-1 rounded bg-[var(--muted)]" />
         </div>
+
         {type === 'shop' ? (
           <div className="grid flex-1 grid-cols-3 gap-3 p-3">
             {[0, 1, 2, 3, 4, 5].map((i) => (
               <div key={i} className="flex flex-col gap-1.5">
-                <div className="flex-1 rounded-md bg-gradient-to-b from-emerald-500/40 to-emerald-500/10" style={{ opacity: 1 - i * 0.08 }} />
+                <div
+                  className="flex-1 rounded-md bg-gradient-to-b from-emerald-500/40 to-emerald-500/10"
+                  style={{ opacity: 1 - i * 0.08 }}
+                />
                 <div className="h-1.5 w-4/5 rounded bg-[var(--border)]" />
                 <div className="h-1.5 w-2/5 rounded bg-emerald-500/60" />
               </div>
             ))}
+          </div>
+        ) : type === 'booking' ? (
+          <div className="flex flex-1 flex-col gap-3 p-3">
+            <div className="flex items-center justify-between">
+              <div className="h-3 w-28 rounded bg-[var(--border)]" />
+              <div className="h-5 w-16 rounded-full bg-emerald-500/20" />
+            </div>
+
+            <div className="grid flex-1 grid-cols-2 gap-3">
+              {[
+                'Seminar Hall',
+                'Conference Room',
+                'Examination Hall',
+                'Auditorium',
+              ].map((hall, i) => (
+                <div
+                  key={hall}
+                  className="flex flex-col justify-between rounded-lg border border-[var(--border)] bg-[var(--muted)] p-3"
+                >
+                  <div className="h-8 rounded bg-emerald-500/15" />
+                  <div className="mt-2 text-[9px] font-semibold text-[var(--subtext)]">
+                    {hall}
+                  </div>
+                  <div
+                    className={`mt-2 h-1.5 w-3/4 rounded ${
+                      i === 2 ? 'bg-amber-400/70' : 'bg-emerald-500/60'
+                    }`}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="relative flex-1 p-3">
@@ -213,9 +298,12 @@ function Mock({ type }) {
 /* ------------------------------ page ------------------------------ */
 
 export default function App() {
-  const [theme, setTheme] = useState(() => localStorage.getItem('portfolio-theme') || 'dark')
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem('portfolio-theme') || 'dark'
+  )
   const [menuOpen, setMenuOpen] = useState(false)
   const [copied, setCopied] = useState(false)
+
   const nameRef = useRef(null)
   const active = useActiveSection(navItems.map(([, id]) => id))
   const progress = useScrollProgress()
@@ -225,12 +313,18 @@ export default function App() {
     localStorage.setItem('portfolio-theme', theme)
   }, [theme])
 
-  const toggleTheme = () => setTheme((v) => (v === 'dark' ? 'light' : 'dark'))
+  const toggleTheme = () =>
+    setTheme((v) => (v === 'dark' ? 'light' : 'dark'))
+
   const closeMenu = () => setMenuOpen(false)
 
   const onHeroMove = (e) => {
     const r = e.currentTarget.getBoundingClientRect()
-    nameRef.current?.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`)
+
+    nameRef.current?.style.setProperty(
+      '--mx',
+      `${((e.clientX - r.left) / r.width) * 100}%`
+    )
   }
 
   const copyEmail = async () => {
@@ -254,8 +348,15 @@ export default function App() {
 
       {/* NAVIGATION */}
       <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-xl">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5 sm:px-8" aria-label="Main navigation">
-          <a href="#home" onClick={closeMenu} className="font-display text-lg font-bold tracking-tight">
+        <nav
+          className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5 sm:px-8"
+          aria-label="Main navigation"
+        >
+          <a
+            href="#home"
+            onClick={closeMenu}
+            className="font-display text-lg font-bold tracking-tight"
+          >
             Gowtham<span className="text-emerald-500"> G B</span>
           </a>
 
@@ -277,6 +378,7 @@ export default function App() {
 
           <div className="flex items-center gap-2">
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
+
             <a
               href="/Gowtham_GB_Resume.pdf"
               download="Gowtham_GB_Resume.pdf"
@@ -285,6 +387,7 @@ export default function App() {
               <Download size={15} />
               Resume
             </a>
+
             <button
               className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] md:hidden"
               onClick={() => setMenuOpen((v) => !v)}
@@ -314,7 +417,11 @@ export default function App() {
 
       <main>
         {/* HERO */}
-        <section id="home" onMouseMove={onHeroMove} className="relative isolate overflow-hidden">
+        <section
+          id="home"
+          onMouseMove={onHeroMove}
+          className="relative isolate overflow-hidden"
+        >
           <div className="dot-grid pointer-events-none absolute inset-0 -z-10" />
           <div className="pointer-events-none absolute -left-32 top-0 -z-10 h-96 w-96 rounded-full bg-emerald-500/15 blur-[110px]" />
           <div className="pointer-events-none absolute -right-24 top-40 -z-10 h-80 w-80 rounded-full bg-teal-500/10 blur-[110px]" />
@@ -341,7 +448,8 @@ export default function App() {
               </p>
 
               <p className="mt-5 max-w-lg leading-8 text-[var(--subtext)]">
-                Currently sharpening my backend skills and exploring how AI can make software more useful.
+                Currently sharpening my backend skills and exploring how AI
+                can make software more useful.
               </p>
 
               <div className="mt-9 flex flex-wrap gap-3">
@@ -352,6 +460,7 @@ export default function App() {
                   See my projects
                   <ArrowDownRight size={18} />
                 </a>
+
                 <a
                   href="#contact"
                   className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-6 py-3.5 font-semibold transition hover:border-emerald-500"
@@ -365,6 +474,7 @@ export default function App() {
                   <MapPin size={15} className="text-emerald-500" />
                   Chennai, India
                 </span>
+
                 <a
                   href="https://www.linkedin.com/in/gbgowtham/"
                   target="_blank"
@@ -385,30 +495,52 @@ export default function App() {
         </section>
 
         {/* ABOUT */}
-        <section id="about" className="border-y border-[var(--border)] bg-[var(--surface)]/60">
+        <section
+          id="about"
+          className="border-y border-[var(--border)] bg-[var(--surface)]/60"
+        >
           <div className="mx-auto grid max-w-6xl gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[1fr_1.1fr] lg:py-28">
             <div>
               <h2 className="font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
                 Building skills by building things.
               </h2>
+
               <p className="mt-6 max-w-md leading-8 text-[var(--subtext)]">
-                I'm a Computer Science student at Anna University with a practical interest in web development. I
-                enjoy connecting a clean user experience with reliable APIs and data.
+                I'm a Computer Science student at Anna University with a
+                practical interest in web development. I enjoy connecting a
+                clean user experience with reliable APIs and data.
               </p>
             </div>
 
             <dl className="divide-y divide-[var(--border)] self-start rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
               {[
-                ['Studying', 'Integrated M.Sc. Computer Science, CEG, Anna University, Chennai'],
-                ['Building', 'Responsive web apps, REST API integrations, authentication flows and database-backed projects'],
-                ['Exploring', 'Python backend development, FastAPI and responsible AI-powered features'],
+                [
+                  'Studying',
+                  'Integrated M.Sc. Computer Science, CEG, Anna University, Chennai',
+                ],
+                [
+                  'Building',
+                  'Responsive web apps, REST API integrations, authentication flows and database-backed projects',
+                ],
+                [
+                  'Exploring',
+                  'Python backend development, FastAPI and responsible AI-powered features',
+                ],
               ].map(([k, v], i) => (
                 <div key={k} className="flex gap-5 p-6 sm:p-7">
                   <dt className="flex w-28 shrink-0 items-start gap-2 font-display font-bold">
-                    {i === 0 && <GraduationCap size={18} className="mt-1 text-emerald-500" />}
+                    {i === 0 && (
+                      <GraduationCap
+                        size={18}
+                        className="mt-1 text-emerald-500"
+                      />
+                    )}
                     {k}
                   </dt>
-                  <dd className="text-sm leading-7 text-[var(--subtext)]">{v}</dd>
+
+                  <dd className="text-sm leading-7 text-[var(--subtext)]">
+                    {v}
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -416,10 +548,17 @@ export default function App() {
         </section>
 
         {/* SKILLS */}
-        <section id="skills" className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:py-28">
-          <h2 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">Technologies I work with</h2>
+        <section
+          id="skills"
+          className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:py-28"
+        >
+          <h2 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
+            Technologies I work with
+          </h2>
+
           <p className="mt-4 max-w-xl text-[var(--subtext)]">
-            My current stack. Things I'm still picking up are marked <span className="text-amber-500">learning</span>.
+            My current stack. Things I'm still picking up are marked{' '}
+            <span className="text-amber-500">learning</span>.
           </p>
 
           <div className="mt-12 grid gap-5 md:grid-cols-3">
@@ -429,10 +568,14 @@ export default function App() {
                 onMouseMove={trackSpot}
                 className="spot rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-7"
               >
-                <h3 className="font-display text-xl font-bold">{group.title}</h3>
+                <h3 className="font-display text-xl font-bold">
+                  {group.title}
+                </h3>
+
                 <ul className="mt-6 flex flex-wrap gap-2">
                   {group.items.map((item) => {
                     const learning = group.learning?.includes(item)
+
                     return (
                       <li
                         key={item}
@@ -443,7 +586,11 @@ export default function App() {
                         }`}
                       >
                         {item}
-                        {learning && <span className="ml-1.5 text-xs opacity-80">learning</span>}
+                        {learning && (
+                          <span className="ml-1.5 text-xs opacity-80">
+                            learning
+                          </span>
+                        )}
                       </li>
                     )
                   })}
@@ -454,11 +601,17 @@ export default function App() {
         </section>
 
         {/* PROJECTS */}
-        <section id="projects" className="border-y border-[var(--border)] bg-[var(--surface)]/60">
+        <section
+          id="projects"
+          className="border-y border-[var(--border)] bg-[var(--surface)]/60"
+        >
           <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:py-28">
-            <h2 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">Projects I've worked on</h2>
+            <h2 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
+              Projects I've worked on
+            </h2>
+
             <p className="mt-4 max-w-xl text-[var(--subtext)]">
-              A full-stack application and a hardware-connected prototype.
+              Full-stack applications built to solve practical problems.
             </p>
 
             <div className="mt-12 space-y-6">
@@ -473,13 +626,24 @@ export default function App() {
                   </div>
 
                   <div className="flex flex-col justify-center p-7 sm:p-10">
-                    <p className="text-sm font-medium text-emerald-500">{p.kind}</p>
-                    <h3 className="font-display mt-2 text-3xl font-bold leading-tight tracking-tight">{p.title}</h3>
-                    <p className="mt-4 leading-7 text-[var(--subtext)]">{p.description}</p>
+                    <p className="text-sm font-medium text-emerald-500">
+                      {p.kind}
+                    </p>
+
+                    <h3 className="font-display mt-2 text-3xl font-bold leading-tight tracking-tight">
+                      {p.title}
+                    </h3>
+
+                    <p className="mt-4 leading-7 text-[var(--subtext)]">
+                      {p.description}
+                    </p>
 
                     <ul className="mt-6 flex flex-wrap gap-2">
                       {p.stack.map((s) => (
-                        <li key={s} className="rounded-full bg-[var(--muted)] px-3 py-1.5 font-mono text-xs text-[var(--subtext)]">
+                        <li
+                          key={s}
+                          className="rounded-full bg-[var(--muted)] px-3 py-1.5 font-mono text-xs text-[var(--subtext)]"
+                        >
                           {s}
                         </li>
                       ))}
@@ -487,15 +651,31 @@ export default function App() {
 
                     <div className="mt-7 flex flex-wrap items-center gap-5 text-sm">
                       {p.github ? (
-                        <a href={p.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 font-semibold hover:text-emerald-500">
-                          <Github size={16} /> View code <ArrowUpRight size={14} />
+                        <a
+                          href={p.github}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 font-semibold hover:text-emerald-500"
+                        >
+                          <Github size={16} />
+                          View code
+                          <ArrowUpRight size={14} />
                         </a>
                       ) : (
-                        <span className="text-[var(--subtext)]">Repository link coming soon</span>
+                        <span className="text-[var(--subtext)]">
+                          Repository link coming soon
+                        </span>
                       )}
+
                       {p.demo && (
-                        <a href={p.demo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 font-semibold hover:text-emerald-500">
-                          Live demo <ArrowUpRight size={14} />
+                        <a
+                          href={p.demo}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 font-semibold hover:text-emerald-500"
+                        >
+                          Live demo
+                          <ArrowUpRight size={14} />
                         </a>
                       )}
                     </div>
@@ -507,23 +687,39 @@ export default function App() {
         </section>
 
         {/* EXPERIENCE */}
-        <section id="experience" className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:py-28">
-          <h2 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">Learning in real project settings</h2>
+        <section
+          id="experience"
+          className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:py-28"
+        >
+          <h2 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
+            Learning in real project settings
+          </h2>
 
           <div className="mt-12 grid gap-8 md:grid-cols-[14rem_1fr]">
             <div className="text-sm text-[var(--subtext)]">
-              <p className="font-display text-lg font-bold text-[var(--text)]">August 2025 onward</p>
+              <p className="font-display text-lg font-bold text-[var(--text)]">
+                August 2025 onward
+              </p>
               <p className="mt-1">Internship</p>
             </div>
 
             <div className="relative border-l border-emerald-500/40 pl-8">
               <span className="absolute -left-[7px] top-2 h-3.5 w-3.5 rounded-full border-2 border-emerald-500 bg-[var(--bg)]" />
-              <p className="text-sm font-semibold text-emerald-500">Muthu Soft Labs Pvt. Ltd.</p>
-              <h3 className="font-display mt-1 text-2xl font-bold tracking-tight">Full Stack Web Development Intern</h3>
-              <p className="mt-4 max-w-2xl leading-7 text-[var(--subtext)]">
-                Worked on BookOrder, a book-ordering web application, using React and Vite on the frontend with
-                Node.js, Express and MySQL for backend services and data.
+
+              <p className="text-sm font-semibold text-emerald-500">
+                Muthu Soft Labs Pvt. Ltd.
               </p>
+
+              <h3 className="font-display mt-1 text-2xl font-bold tracking-tight">
+                Full Stack Web Development Intern
+              </h3>
+
+              <p className="mt-4 max-w-2xl leading-7 text-[var(--subtext)]">
+                Worked on BookOrder, a book-ordering web application, using
+                React and Vite on the frontend with Node.js, Express and MySQL
+                for backend services and data.
+              </p>
+
               <ul className="mt-6 space-y-3 text-sm text-[var(--subtext)]">
                 {[
                   'Built and connected pages including home, login, registration, profile and cart.',
@@ -531,7 +727,10 @@ export default function App() {
                   'Used XAMPP and phpMyAdmin during local development.',
                 ].map((t) => (
                   <li key={t} className="flex gap-3">
-                    <Check size={16} className="mt-0.5 shrink-0 text-emerald-500" />
+                    <Check
+                      size={16}
+                      className="mt-0.5 shrink-0 text-emerald-500"
+                    />
                     {t}
                   </li>
                 ))}
@@ -541,13 +740,18 @@ export default function App() {
         </section>
 
         {/* CONTACT */}
-        <section id="contact" className="border-t border-[var(--border)] bg-[var(--surface)]/60">
+        <section
+          id="contact"
+          className="border-t border-[var(--border)] bg-[var(--surface)]/60"
+        >
           <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:py-28">
             <h2 className="font-display max-w-3xl text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
               Let's build something useful together.
             </h2>
+
             <p className="mt-6 max-w-xl leading-7 text-[var(--subtext)]">
-              I'm interested in software development internships, job opportunities and collaborations.
+              I'm interested in software development internships, job
+              opportunities and collaborations.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-3">
@@ -557,38 +761,84 @@ export default function App() {
               >
                 {EMAIL}
               </a>
+
               <button
                 onClick={copyEmail}
                 className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-4 py-2 text-sm transition hover:border-emerald-500"
                 aria-live="polite"
               >
-                {copied ? <Check size={15} className="text-emerald-500" /> : <Copy size={15} />}
+                {copied ? (
+                  <Check size={15} className="text-emerald-500" />
+                ) : (
+                  <Copy size={15} />
+                )}
                 {copied ? 'Copied' : 'Copy email'}
               </button>
             </div>
 
             <ul className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--border)] sm:grid-cols-2">
               {[
-                { icon: Phone, label: 'Phone', value: '+91 84899 66821', href: 'tel:+918489966821' },
-                { icon: Linkedin, label: 'LinkedIn', value: 'linkedin.com/in/gbgowtham', href: 'https://www.linkedin.com/in/gbgowtham/', ext: true },
-                { icon: MapPin, label: 'Location', value: 'Saidapet, Chennai, Tamil Nadu, India' },
-                { icon: Github, label: 'GitHub', value: 'Profile coming soon' },
+                {
+                  icon: Phone,
+                  label: 'Phone',
+                  value: '+91 84899 66821',
+                  href: 'tel:+918489966821',
+                },
+                {
+                  icon: Linkedin,
+                  label: 'LinkedIn',
+                  value: 'linkedin.com/in/gbgowtham',
+                  href: 'https://www.linkedin.com/in/gbgowtham/',
+                  ext: true,
+                },
+                {
+                  icon: MapPin,
+                  label: 'Location',
+                  value: 'Saidapet, Chennai, Tamil Nadu, India',
+                },
+                {
+                  icon: Github,
+                  label: 'GitHub',
+                  value: 'github.com/venkjoy',
+                  href: 'https://github.com/venkjoy',
+                  ext: true,
+                },
               ].map(({ icon: Icon, label, value, href, ext }) => {
                 const inner = (
                   <>
-                    <Icon size={22} className="shrink-0 text-emerald-500" />
+                    <Icon
+                      size={22}
+                      className="shrink-0 text-emerald-500"
+                    />
+
                     <div className="min-w-0">
-                      <p className="text-xs text-[var(--subtext)]">{label}</p>
+                      <p className="text-xs text-[var(--subtext)]">
+                        {label}
+                      </p>
                       <p className="truncate font-medium">{value}</p>
                     </div>
-                    {href && <ArrowUpRight size={16} className="ml-auto shrink-0 text-[var(--subtext)]" />}
+
+                    {href && (
+                      <ArrowUpRight
+                        size={16}
+                        className="ml-auto shrink-0 text-[var(--subtext)]"
+                      />
+                    )}
                   </>
                 )
-                const cls = 'flex items-center gap-4 bg-[var(--surface)] p-6'
+
+                const cls =
+                  'flex items-center gap-4 bg-[var(--surface)] p-6'
+
                 return (
                   <li key={label}>
                     {href ? (
-                      <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noreferrer' : undefined} className={`${cls} h-full transition hover:bg-[var(--muted)]`}>
+                      <a
+                        href={href}
+                        target={ext ? '_blank' : undefined}
+                        rel={ext ? 'noreferrer' : undefined}
+                        className={`${cls} h-full transition hover:bg-[var(--muted)]`}
+                      >
                         {inner}
                       </a>
                     ) : (
@@ -602,9 +852,17 @@ export default function App() {
         </section>
       </main>
 
+      {/* FOOTER */}
       <footer className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-sm text-[var(--subtext)] sm:flex-row sm:items-center sm:justify-between sm:px-8">
-        <p>© {new Date().getFullYear()} Gowtham G B. Built with React, Tailwind CSS & Python.</p>
-        <a href="#home" className="inline-flex items-center gap-2 hover:text-emerald-500">
+        <p>
+          © {new Date().getFullYear()} Gowtham G B. Built with React, Tailwind
+          CSS & Python.
+        </p>
+
+        <a
+          href="#home"
+          className="inline-flex items-center gap-2 hover:text-emerald-500"
+        >
           Back to top
           <ArrowUpRight size={15} />
         </a>
